@@ -1,0 +1,24 @@
+#include "base.effect"
+
+uniform texture2d TextureA < string field_type = "input";
+> ;
+
+uniform texture2d TextureB < string field_type = "input";
+> ;
+
+//-----------------------------------------------------------------------------
+// Technique: Add
+//-----------------------------------------------------------------------------
+
+float4 PSAdd(VertexInformation vtx) : TARGET {
+  float4 textureA = TextureA.Sample(LinearClampSampler, vtx.texcoord0.xy);
+  float4 textureB = TextureB.Sample(LinearClampSampler, vtx.texcoord0.xy);
+  return (textureA + textureB);
+}
+
+technique Add {
+  pass {
+    vertex_shader = DefaultVertexShader(vtx);
+    pixel_shader = PSAdd(vtx);
+  }
+}

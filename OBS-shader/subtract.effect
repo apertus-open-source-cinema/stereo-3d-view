@@ -1,0 +1,24 @@
+#include "base.effect"
+
+uniform texture2d TextureA < string field_type = "input";
+> ;
+
+uniform texture2d TextureB < string field_type = "input";
+> ;
+
+//-----------------------------------------------------------------------------
+// Technique: Subtract
+//-----------------------------------------------------------------------------
+
+float4 PSSubtract(VertexInformation vtx) : TARGET {
+  float3 textureA = TextureA.Sample(LinearClampSampler, vtx.texcoord0.xy).rgb;
+  float3 textureB = TextureB.Sample(LinearClampSampler, vtx.texcoord0.xy).rgb;
+  return float4(abs(textureA - textureB), 1.0);
+}
+
+technique Subtract {
+  pass {
+    vertex_shader = DefaultVertexShader(vtx);
+    pixel_shader = PSSubtract(vtx);
+  }
+}
